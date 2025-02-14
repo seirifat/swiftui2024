@@ -7,21 +7,29 @@
 
 import SwiftUI
 
-struct LearnObservableView: View {
-    @ObservedObject var settings = UserSettings()
-    
+struct InnerView: View {
+    @ObservedObject var progress: UserProgress
+
     var body: some View {
-        VStack {
-            Text("Hello, \(settings.username)!")
-            Button("Change Username") {
-                settings.username = "John Doe"
-            }
+        Button("Increase Score") {
+            progress.score += 1
         }
     }
 }
 
-class UserSettings: ObservableObject {
-  @Published var username = "Anonymous"
+struct LearnObservableView: View {
+    @ObservedObject var progress = UserProgress()
+    
+    var body: some View {
+        VStack {
+            Text("Score: \(progress.score)")
+            InnerView(progress: progress)
+        }
+    }
+}
+
+class UserProgress: ObservableObject {
+  @Published var score = 0
 }
 
 #Preview {
